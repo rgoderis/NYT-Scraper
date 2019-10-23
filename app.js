@@ -34,19 +34,19 @@ app.get("/api/scrape", function(req, res){
     axios.get("https://www.nytimes.com").then(response=>{
         const $ = cheerio.load(response.data);
         // loop over each article and grab data 
-        $("article").each(i, element=>{
+        $("article").each(function(i, element){
             // save empty result obj
             let result = {}
             // add title, text, and href of each link and save as properties of result
             result.title = $(this)
             .find("h2")
-            .text()
+            .text();
             result.text = $(this)
             .find("p")
-            .text()
+            .text();
             result.link = $(this)
             .find("a")
-            .attr("href")
+            .attr("href");
             console.log(result);
             // create new article from result obj
             db.Article.create(result)
@@ -59,5 +59,13 @@ app.get("/api/scrape", function(req, res){
             });
         });
         console.log("Scrape complete");
+    });
+});
+
+// route for retreiving all articles
+app.get("/", (req, res)=>{
+    db.Article.find({}, (err, docs)=>{
+        if(err) throw err;
+        res.json(docs)
     });
 });

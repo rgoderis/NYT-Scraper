@@ -20,6 +20,11 @@ const ArticleSchema = new Schema({
         type: String,
         required: true
     },
+    // set saved as boolean with default as false
+    saved: {
+        type: Boolean,
+        default: false
+    },
     // set notes to an array containing the ObjectId of Notes
     notes: [
         {
