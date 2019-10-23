@@ -48,7 +48,16 @@ app.get("/api/scrape", function(req, res){
             .find("a")
             .attr("href")
             console.log(result);
-
+            // create new article from result obj
+            db.Article.create(result)
+            .then(dbArticle =>{
+                // log added result
+                console.log(dbArticle)
+            }).catch(err=>{
+                // log and errors
+                console.log(err)
+            });
         });
-    })
-})
+        console.log("Scrape complete");
+    });
+});
