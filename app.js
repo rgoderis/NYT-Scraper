@@ -48,6 +48,7 @@ app.get("/api/scrape", function(req, res){
             .find("a")
             .attr("href")
             console.log(result);
-        })
+
+        });
     })
 })
