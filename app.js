@@ -40,11 +40,18 @@ mongoose.connect("mongodb://localhost/nyt_scraper", {useNewUrlParser: true});
 // ROUTES
 // root route
 app.get("/", (req, res)=>{
-    res.render("index")
+    db.Article.find({}, (err, docs)=>{
+        if(err) throw err;
+    }).then(dbArticle=>{
+        const articleObj = {
+            article: dbArticle
+        }
+        res.render("index", articleObj)
+    });
 })
 
 // route to scrape new data
-app.post("/api/articles", function(req, res){
+app.get("/api/articles", function(req, res){
     // retrieve info from nytimes
     axios.get("https://www.nytimes.com").then(response=>{
         const $ = cheerio.load(response.data);
@@ -65,26 +72,21 @@ app.post("/api/articles", function(req, res){
             console.log(result);
             // create new article from result obj
             db.Article.create(result)
-            .then(dbArticle =>{
+            .then(article =>{
                 // log added result
-                console.log(dbArticle)
+                console.log(article)
                 res.json(result)
-            }).catch(err=>{
+            })
+            .catch(err=>{
                 // log and errors
                 console.log(err)
             });
         });
-        console.log("Scrape complete");
+        res.send("Scrape Complete");
     });
 });
 
-// route for retreiving all articles
-app.get("/api/articles", (req, res)=>{
-    db.Article.find({}, (err, docs)=>{
-        if(err) throw err;
-        res.json(docs)
-    });
-});
+
 
 // route to delete all articles
 app.get("/api/delete", (req, res)=>{

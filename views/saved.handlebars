@@ -1,0 +1,11 @@
+<nav>
+    <button class="scraper">Scrape New Articles!</button>
+    <button class="clear">Clear Articles!</button>
+</nav>
+<div class="unsaved">
+    {{#each article}}
+        {{#if saved}}
+             {{> articles/saved-block}}
+        {{/if}}
+    {{/each}}
+</div>
