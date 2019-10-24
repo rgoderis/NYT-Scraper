@@ -86,7 +86,15 @@ app.get("/api/articles", function(req, res){
     });
 });
 
-
+// route to update saved
+app.put("/article/:id", (req, res)=>{
+    console.log(req.params.id);
+    db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: true}})
+    .then(updatedArticle=>{
+        console.log(updatedArticle);
+        res.json(updatedArticle);
+    });
+});
 
 // route to delete all articles
 app.get("/api/delete", (req, res)=>{
