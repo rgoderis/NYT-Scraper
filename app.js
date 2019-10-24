@@ -2,6 +2,7 @@
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const exphbs = require("express-handlebars");
 
 // scraping tools
 const cheerio = require("cheerio");
@@ -24,12 +25,26 @@ app.use(express.json());
 // set public as static
 app.use(express.static("public"));
 
+// Handlebars
+app.engine(
+    "handlebars",
+    exphbs({
+      defaultLayout: "main"
+    })
+  );
+app.set("view engine", "handlebars");
+
 // connection to Mongo DB
 mongoose.connect("mongodb://localhost/nyt_scraper", {useNewUrlParser: true});
 
 // ROUTES
+// root route
+app.get("/", (req, res)=>{
+    res.render("index")
+})
+
 // route to scrape new data
-app.get("/api/scrape", function(req, res){
+app.post("/api/articles", function(req, res){
     // retrieve info from nytimes
     axios.get("https://www.nytimes.com").then(response=>{
         const $ = cheerio.load(response.data);
@@ -44,7 +59,7 @@ app.get("/api/scrape", function(req, res){
             result.text = $(this)
             .find("p")
             .text();
-            result.link = $(this)
+            result.link = "https://www.nytimes.com"+$(this)
             .find("a")
             .attr("href");
             console.log(result);
@@ -53,6 +68,7 @@ app.get("/api/scrape", function(req, res){
             .then(dbArticle =>{
                 // log added result
                 console.log(dbArticle)
+                res.json(result)
             }).catch(err=>{
                 // log and errors
                 console.log(err)
@@ -63,9 +79,22 @@ app.get("/api/scrape", function(req, res){
 });
 
 // route for retreiving all articles
-app.get("/", (req, res)=>{
+app.get("/api/articles", (req, res)=>{
     db.Article.find({}, (err, docs)=>{
         if(err) throw err;
         res.json(docs)
     });
 });
+
+// route to delete all articles
+app.get("/api/delete", (req, res)=>{
+    db.Article.remove({}, (err, removed)=>{
+        if(err) throw err;
+        res.json(removed)
+    });
+});
+
+// Start the server
+app.listen(PORT, function() {
+    console.log("App running on port " + PORT + "!");
+  });
