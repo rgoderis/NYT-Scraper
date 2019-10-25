@@ -28,7 +28,7 @@ $(document).on("click", ".save", function(event){
     });
      location.reload();
 });
-// click listener for unsave button
+// click listener for delete button
 $(document).on("click", ".delete", function(event){
     event.preventDefault();
     let thisId = $(this).attr("data-id");
@@ -70,7 +70,7 @@ $(document).on("click", ".add-note", function(event){
 $(document).on("click", ".submit-note", function(event){
     event.preventDefault();
     let thisId = $(this).attr("data-id")
-    let thisNote = $(".note-input").val();
+    let thisNote = $(".note-input"+thisId).val();
     console.log(thisNote)
     if(thisNote !== ""){
         $.ajax({
