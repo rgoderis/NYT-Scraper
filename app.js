@@ -11,7 +11,7 @@ const axios = require("axios");
 // require all models
 const db = require("./models");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // initialize express
 const app = express();
@@ -34,8 +34,11 @@ app.engine(
   );
 app.set("view engine", "handlebars");
 
-// connection to Mongo DB
-mongoose.connect("mongodb://localhost/nyt_scraper", {useNewUrlParser: true});
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nyt_scraper";
+
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.set("useCreatedIndex", true)
 
 // ROUTES
 // root route
@@ -56,7 +59,6 @@ app.get("/saved", (req, res)=>{
     db.Article.find({}, (err, docs)=>{
         if(err) throw err;
     })
-    .populate("notes")
     .then(dbArticle=>{
         const savedObj = {
             article: dbArticle
@@ -116,17 +118,13 @@ app.get("/api/delete", (req, res)=>{
 });
 
 // route to get a specific article's notes by its id
-// app.get("/article/:id", (req, res)=>{
-//     db.Article.findOne({_id: req.params.id})
-//     // populate the articles notes
-//     .populate("notes")
-//     .then(dbArticle=>{
-//         const noteObj = {
-//             note: dbArticle
-//         }
-//         res.render("saved", noteObj)
-//     });
-// });
+app.get("/article/:id", (req, res)=>{
+    db.Article.findOne({_id: req.params.id})
+    // populate the articles notes
+    .populate("notes")
+    .then(notes=> res.json(notes))
+    .catch(err=>res.json(err));
+});
 
 // route to add a new note
 app.post("/article/:id", (req, res)=>{
