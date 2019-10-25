@@ -90,3 +90,15 @@ $(document).on("click", ".submit-note", function(event){
     location.reload();
 });
 
+// click listener for delete note to delete associated note
+$(document).on("click", ".delete-note", function(event){
+    event.preventDefault();
+    let thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "DELETE",
+        url: "/note/"+thisId
+    }).then(err=>{
+        if(err) throw err
+    });
+    location.reload();
+});

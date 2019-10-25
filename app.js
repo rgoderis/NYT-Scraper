@@ -136,6 +136,13 @@ app.post("/article/:id", (req, res)=>{
     .catch(err=>res.json(err));
 });
 
+// route to delete note
+app.delete("/note/:id", (req, res)=>{
+    db.Note.findOneAndDelete({_id: req.params.id}, (err) =>{
+        if(err) throw err;
+    })
+})
+
 // Start the server
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + "!");
