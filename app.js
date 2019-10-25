@@ -81,46 +81,26 @@ app.get("/api/articles", function(req, res){
             result.link = "https://www.nytimes.com"+$(this)
             .find("a")
             .attr("href");
-            console.log(result);
             // create new article from result obj
             db.Article.create(result)
-            .then(article =>{
-                // log added result
-                console.log(article)
-                res.json(result)
-            })
-            .catch(err=>{
-                // log and errors
-                console.log(err)
-            });
+            .then(article => res.json(result))
+            .catch(err=> console.log(err));
         });
         res.send("Scrape Complete");
     });
 });
 
-// route to update saved
+// route to update saved 
 app.put("/article/:id", (req, res)=>{
-    console.log(req.params.id);
-    let update = req.body
-    console.log(req.body)
-    if(update === "false"){
-        update = false
-    } else {
-        update = true
-    }
     console.log(update)
-    db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: update}})
-    .then(updatedArticle=>{
-        console.log(updatedArticle);
-        res.json(updatedArticle);
-    });
+    db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: true}})
+    .then(updatedArticle=> res.json(updatedArticle));
 });
 
 // route to delete single article
 app.delete("/article/:id", (req, res)=>{
     db.Article.findOneAndDelete({_id: req.params.id}, (err, deleted)=>{
         if(err) throw err;
-        console.log("deleted article")
     });
 });
 
@@ -131,6 +111,19 @@ app.get("/api/delete", (req, res)=>{
         res.json(removed)
     });
 });
+
+// route to get a specific article's notes by its id
+app.get("/article/:id", (req, res)=>{
+    db.Article.findOne({_id: req.params.id})
+    // populate the articles notes
+    .populate("notes")
+    .then(dbArticle=>{
+        res.json(dbArticle)
+    });
+});
+
+// route to add a new note
+app.post("/article/:id", (req, res))
 
 // Start the server
 app.listen(PORT, function() {
