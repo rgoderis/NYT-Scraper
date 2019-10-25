@@ -52,16 +52,16 @@ $(document).on("click", ".add-note", function(event){
         $(".notes-display").empty();
         for(var i =0; i < data.notes.length; i++){
             console.log(data.notes[i])
-            let div = $("<div>");
-            div.addClass("note-display")
+            let li = $("<li>");
+            li.addClass("note-display list-group-item")
             let p = $("<p>")
             let button = $("<button>");
             button.text("X");
-            button.addClass("delete-note");
+            button.addClass("delete-note btn btn-danger");
             button.attr("data-id", data.notes[i]._id)
             p.text(data.notes[i].body)
-            $(div).append(p,button);
-            $(".notes-display").append(div);
+            $(li).append(p,button);
+            $(".notes-display").append(li);
         }
     });
 });

@@ -1,8 +1,11 @@
-<nav>
-    <button class="scraper">Scrape New Articles!</button>
-    <button class="clear">Clear Articles!</button>
-    <a href="/saved">saved</a>
+<nav class="navbar navbar-expanded-lg navbar-dark bg-primary">
+    <h1><a class="navbar-brand text-white">New York Times Scraper</a><a class="navbar-brand nav-link text-white" href="/saved">Saved Articles</a></h1>
+    <span>
+        <a class="btn btn-secondary scrape-new">SCRAPE NEW ARTICLES!</a>
+        <a class="btn btn-danger clear">CLEAR ARTICLES!</a>
+    </span>
 </nav>
+
 <div class="articles">
     {{#each article}}
         {{#unless saved}}
