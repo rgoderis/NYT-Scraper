@@ -123,7 +123,14 @@ app.get("/article/:id", (req, res)=>{
 });
 
 // route to add a new note
-app.post("/article/:id", (req, res))
+app.post("/article/:id", (req, res)=>{
+    db.Note.create(req.body)
+    .then(dbNote=>{
+        return db.Article.findOneAndUpdate({_id: req.params.id}, {$push:{notes: dbNote._id}}, {new: true});
+    })
+    .then(dbUser=>res.json(dbUser))
+    .catch(err=>res.json(err));
+});
 
 // Start the server
 app.listen(PORT, function() {
