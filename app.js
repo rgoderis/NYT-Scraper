@@ -42,7 +42,8 @@ mongoose.connect("mongodb://localhost/nyt_scraper", {useNewUrlParser: true});
 app.get("/", (req, res)=>{
     db.Article.find({}, (err, docs)=>{
         if(err) throw err;
-    }).then(dbArticle=>{
+    })
+    .then(dbArticle=>{
         const articleObj = {
             article: dbArticle
         }
@@ -54,7 +55,9 @@ app.get("/", (req, res)=>{
 app.get("/saved", (req, res)=>{
     db.Article.find({}, (err, docs)=>{
         if(err) throw err;
-    }).then(dbArticle=>{
+    })
+    .populate("notes")
+    .then(dbArticle=>{
         const savedObj = {
             article: dbArticle
         }
@@ -92,7 +95,7 @@ app.get("/api/articles", function(req, res){
 
 // route to update saved 
 app.put("/article/:id", (req, res)=>{
-    console.log(update)
+    // console.log(update)
     db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: true}})
     .then(updatedArticle=> res.json(updatedArticle));
 });
@@ -113,14 +116,17 @@ app.get("/api/delete", (req, res)=>{
 });
 
 // route to get a specific article's notes by its id
-app.get("/article/:id", (req, res)=>{
-    db.Article.findOne({_id: req.params.id})
-    // populate the articles notes
-    .populate("notes")
-    .then(dbArticle=>{
-        res.json(dbArticle)
-    });
-});
+// app.get("/article/:id", (req, res)=>{
+//     db.Article.findOne({_id: req.params.id})
+//     // populate the articles notes
+//     .populate("notes")
+//     .then(dbArticle=>{
+//         const noteObj = {
+//             note: dbArticle
+//         }
+//         res.render("saved", noteObj)
+//     });
+// });
 
 // route to add a new note
 app.post("/article/:id", (req, res)=>{
