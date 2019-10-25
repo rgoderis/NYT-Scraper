@@ -31,7 +31,7 @@ $(document).on("click", ".save", function(event){
 // click listener for unsave button
 $(document).on("click", ".delete", function(event){
     event.preventDefault();
-    var thisId = $(this).attr("data-id");
+    let thisId = $(this).attr("data-id");
     $.ajax({
         method: "DELETE",
         url: "/article/"+thisId
@@ -41,4 +41,52 @@ $(document).on("click", ".delete", function(event){
      location.reload();
 });
 
+// click listener for add-note to display notes
+$(document).on("click", ".add-note", function(event){
+    event.preventDefault();
+    let thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "GET",
+        url: "/article/"+thisId
+    }).then(data=>{
+        $(".notes-display").empty();
+        for(var i =0; i < data.notes.length; i++){
+            console.log(data.notes[i])
+            let div = $("<div>");
+            div.addClass("note-display")
+            let p = $("<p>")
+            let button = $("<button>");
+            button.text("X");
+            button.addClass("delete-note");
+            button.attr("data-id", data.notes[i]._id)
+            p.text(data.notes[i].body)
+            $(div).append(p,button);
+            $(".notes-display").append(div);
+        }
+    });
+});
+
+// click listener for submit-note to add new note
+$(document).on("click", ".submit-note", function(event){
+    event.preventDefault();
+    let thisId = $(this).attr("data-id")
+    let thisNote = $(".note-input").val();
+    console.log(thisNote)
+    if(thisNote !== ""){
+        $.ajax({
+            method: "POST",
+            url: "/article/"+thisId,
+            data: {
+                body: thisNote
+            }
+        }).then(data=>{
+            console.log(data);
+            $(".note-input").val("")
+        });
+    }
+    else{
+        return false;
+    }
+    location.reload();
+});
 

@@ -1,5 +1,26 @@
 <div>
-    <h4><a href="{{link}}">{{title}}</a></h4><button class="delete" data-id="{{id}}">Delete Article</button>
-    <button class="add-note" data-id="{{id}}">Add Note</button>
+    <h4><a href="{{link}}">{{title}}</a></h4><button class="delete btn btn-danger" data-id="{{id}}">Delete Article</button>
+    <button class="add-note btn btn-primary" data-toggle="modal" data-target=".basicExampleModal" data-id="{{id}}">Add Note</button>
     <p>{{text}}</p>
+</div>
+<!-- Modal -->
+<div class="modal fade basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title exampleModalLabel">Note for article: {{title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="notes-display">
+          </div>
+          <input class="note-input" type="text" placeholder="New Note">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary submit-note" data-id="{{id}}">Save Note</button>
+      </div>
+    </div>
+  </div>
 </div>
