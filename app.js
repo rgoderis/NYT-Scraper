@@ -48,7 +48,19 @@ app.get("/", (req, res)=>{
         }
         res.render("index", articleObj)
     });
-})
+});
+
+// saved route
+app.get("/saved", (req, res)=>{
+    db.Article.find({}, (err, docs)=>{
+        if(err) throw err;
+    }).then(dbArticle=>{
+        const savedObj = {
+            article: dbArticle
+        }
+        res.render("saved", savedObj)
+    });
+});
 
 // route to scrape new data
 app.get("/api/articles", function(req, res){
@@ -89,10 +101,26 @@ app.get("/api/articles", function(req, res){
 // route to update saved
 app.put("/article/:id", (req, res)=>{
     console.log(req.params.id);
-    db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: true}})
+    let update = req.body
+    console.log(req.body)
+    if(update === "false"){
+        update = false
+    } else {
+        update = true
+    }
+    console.log(update)
+    db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: update}})
     .then(updatedArticle=>{
         console.log(updatedArticle);
         res.json(updatedArticle);
+    });
+});
+
+// route to delete single article
+app.delete("/article/:id", (req, res)=>{
+    db.Article.findOneAndDelete({_id: req.params.id}, (err, deleted)=>{
+        if(err) throw err;
+        console.log("deleted article")
     });
 });
 
