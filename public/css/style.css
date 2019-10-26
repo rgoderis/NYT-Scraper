@@ -1,3 +1,12 @@
+body {
+    background-color: #cccccc;
+}
+
 .delete-note{
     float: right;
+}
+.jumbotron{
+    background-image: url("/images/times.jpeg");
+    background-size: cover;
+    height: 50em;
 }
