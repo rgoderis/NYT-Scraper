@@ -3,7 +3,7 @@ New York Times Scraper is a full stack **CRUD** app that utilizes Mongoose, Mong
 Axios and Cheerio are utilized to create a custom API by scraping data from the front page of the *New York Times*.  This information is added to a Mongo database and rendered to the user utilizing Handlebars.  All routes are handled using Express and Mongoose and Morgan is utilized for more detailed error handleing.
 
 ### Home Page
-![Home Page](./public/images/background.jpeg "Home Page")
+![Home Page](./public/images/background.png "Home Page")
 From here the user can scrape the mose current articles from the *New York Times* and render them to the page.  The user can then favorite articles to save to the saved articles page or remove all articles from the page and database.
 
 ### Saved Articles
