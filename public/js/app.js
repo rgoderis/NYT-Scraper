@@ -1,5 +1,5 @@
 // click listener for scraper button
-$(document).on("click", ".scraper", (event)=>{
+$(document).on("click", ".scraper-new", (event)=>{
     event.preventDefault()
     $.get("/api/articles", function(){
         console.log("scraped new articles")
