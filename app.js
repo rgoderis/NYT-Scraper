@@ -76,9 +76,6 @@ app.get("/api/articles", function(req, res){
         $("article").each(function(i, element){
             // save empty result obj
             let result = {}
-            console.log(this);
-            console.log(element);
-            console.log(i);
             // add title, text, and href of each link and save as properties of result
             result.title = $(this)
             .find("h2")
@@ -90,9 +87,11 @@ app.get("/api/articles", function(req, res){
             .find("a")
             .attr("href");
             // create new article from result obj
-            db.Article.create(result)
-            .then(article => res.json(result))
-            .catch(err=> console.log(err));
+            if(result.title !== "" || result.text !== ""){
+                db.Article.create(result)
+                .then(article => res.json(result))
+                .catch(err=> console.log(err));
+            }
         });
         res.send("Scrape Complete");
     });

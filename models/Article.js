@@ -8,17 +8,15 @@ const ArticleSchema = new Schema({
     // set title to a string and required
     title: {
         type: String,
-        required: true
+        unique: true
     },
     // set text to string and required
     text: {
         type: String,
-        required: true
     },
     // set url link to a string and required
     link: {
         type: String,
-        required: true
     },
     // set saved as boolean with default as false
     saved: {
