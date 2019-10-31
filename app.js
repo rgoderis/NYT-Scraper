@@ -76,6 +76,9 @@ app.get("/api/articles", function(req, res){
         $("article").each(function(i, element){
             // save empty result obj
             let result = {}
+            console.log(this);
+            console.log(element);
+            console.log(i);
             // add title, text, and href of each link and save as properties of result
             result.title = $(this)
             .find("h2")
